@@ -34,6 +34,10 @@ class PodcastFetcher(
      * It seems that most podcast hosts do not implement HTTP caching appropriately.
      * Instead of fetching data on every app open, we instead allow the use of 'stale'
      * network responses (up to 8 hours).
+     *
+     * A Cache-Control header with cache directives from a server or client.
+     * These directives set policy on what responses can be stored, and which requests
+     * can be satisfied by those stored responses.
      */
     private val cacheControl: CacheControl by lazy {
         CacheControl.Builder().maxStale(8, TimeUnit.HOURS).build()
