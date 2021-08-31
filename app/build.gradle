@@ -16,7 +16,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        applicationId 'com.example.jetcaster'
+        applicationId 'ru.aasmc.myjetcaster'
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1

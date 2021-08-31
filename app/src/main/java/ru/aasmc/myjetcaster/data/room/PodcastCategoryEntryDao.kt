@@ -1,11 +1,9 @@
 package ru.aasmc.myjetcaster.data.room
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Update
+import androidx.room.*
 import ru.aasmc.myjetcaster.data.PodcastCategoryEntry
 
+@Dao
 abstract class PodcastCategoryEntryDao {
     /**
      * The following methods should really live in a base interface. Unfortunately the Kotlin

@@ -3,6 +3,7 @@ package ru.aasmc.myjetcaster.data.room
 import androidx.room.*
 import ru.aasmc.myjetcaster.data.PodcastFollowedEntry
 
+@Dao
 abstract class PodcastFollowedEntryDao {
 
     @Query("DELETE FROM podcast_followed_entries WHERE podcast_uri = :podcastUri")
