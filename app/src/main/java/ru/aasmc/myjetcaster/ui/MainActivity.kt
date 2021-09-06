@@ -1,4 +1,4 @@
-package ru.aasmc.myjetcaster
+package ru.aasmc.myjetcaster.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
