@@ -9,16 +9,15 @@ import ru.aasmc.myjetcaster.data.room.TransactionRunner
  * A data repository for [Podcast] instances.
  */
 class PodcastStore(
-    private val podcastsDao: PodcastsDao,
+    private val podcastDao: PodcastsDao,
     private val podcastFollowedEntryDao: PodcastFollowedEntryDao,
     private val transactionRunner: TransactionRunner
 ) {
-
     /**
-     * Returns a flow containing the [Podcast] with the given [uri].
+     * Return a flow containing the [Podcast] with the given [uri].
      */
     fun podcastWithUri(uri: String): Flow<Podcast> {
-        return podcastsDao.podcastWithUri(uri)
+        return podcastDao.podcastWithUri(uri)
     }
 
     /**
@@ -26,23 +25,23 @@ class PodcastStore(
      * publish date for each podcast.
      */
     fun podcastsSortedByLastEpisode(
-        limit: Int = Integer.MAX_VALUE
+        limit: Int = Int.MAX_VALUE
     ): Flow<List<PodcastWithExtraInfo>> {
-        return podcastsDao.podcastsSortedByLastEpisode(limit)
+        return podcastDao.podcastsSortedByLastEpisode(limit)
     }
 
+    /**
+     * Returns a flow containing a list of all followed podcasts, sorted by the their last
+     * episode date.
+     */
     fun followedPodcastsSortedByLastEpisode(
-        limit: Int = Integer.MAX_VALUE
+        limit: Int = Int.MAX_VALUE
     ): Flow<List<PodcastWithExtraInfo>> {
-        return podcastsDao.followedPodcastsSortedByLastEpisode(limit)
+        return podcastDao.followedPodcastsSortedByLastEpisode(limit)
     }
 
     private suspend fun followPodcast(podcastUri: String) {
         podcastFollowedEntryDao.insert(PodcastFollowedEntry(podcastUri = podcastUri))
-    }
-
-    suspend fun unfollowPodcast(podcastUri: String) {
-        podcastFollowedEntryDao.deleteWithPodcastUri(podcastUri)
     }
 
     suspend fun togglePodcastFollowed(podcastUri: String) = transactionRunner {
@@ -53,17 +52,22 @@ class PodcastStore(
         }
     }
 
+    suspend fun unfollowPodcast(podcastUri: String) {
+        podcastFollowedEntryDao.deleteWithPodcastUri(podcastUri)
+    }
+
     /**
      * Add a new [Podcast] to this store.
      *
      * This automatically switches to the main thread to maintain thread consistency.
      */
     suspend fun addPodcast(podcast: Podcast) {
-        podcastsDao.insert(podcast)
+        podcastDao.insert(podcast)
     }
 
-    suspend fun isEmpty(): Boolean = podcastsDao.count() == 0
+    suspend fun isEmpty(): Boolean = podcastDao.count() == 0
 }
+
 
 
 

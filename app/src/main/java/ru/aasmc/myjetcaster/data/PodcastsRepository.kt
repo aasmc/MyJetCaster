@@ -10,10 +10,10 @@ import kotlinx.coroutines.launch
 import ru.aasmc.myjetcaster.data.room.TransactionRunner
 
 /**
- * Data repo for Podcasts.
+ * Data repository for Podcasts.
  */
 class PodcastsRepository(
-    private val podcastsFetcher: PodcastFetcher,
+    private val podcastsFetcher: PodcastsFetcher,
     private val podcastStore: PodcastStore,
     private val episodeStore: EpisodeStore,
     private val categoryStore: CategoryStore,
@@ -29,6 +29,7 @@ class PodcastsRepository(
             refreshingJob?.join()
         } else if (force || podcastStore.isEmpty()) {
             refreshingJob = scope.launch {
+                // Now fetch the podcasts, and add each to each store
                 podcastsFetcher(SampleFeeds)
                     .filter { it is PodcastRssResponse.Success }
                     .map { it as PodcastRssResponse.Success }
@@ -38,9 +39,9 @@ class PodcastsRepository(
                             episodeStore.addEpisodes(episodes)
 
                             categories.forEach { category ->
-                                // step 1: insert category
+                                // First insert the category
                                 val categoryId = categoryStore.addCategory(category)
-                                // step 2: add the podcast to the category
+                                // Now we can add the podcast to the category
                                 categoryStore.addPodcastToCategory(
                                     podcastUri = podcast.uri,
                                     categoryId = categoryId

@@ -16,15 +16,15 @@ class EpisodeToPodcast {
     val podcast: Podcast
         get() = _podcasts[0]
 
+    /**
+     * Allow consumers to destructure this class
+     */
     operator fun component1() = episode
     operator fun component2() = podcast
 
     override fun equals(other: Any?): Boolean = when {
         other === this -> true
-        other is EpisodeToPodcast -> {
-            episode == other.episode
-                    && _podcasts == other._podcasts
-        }
+        other is EpisodeToPodcast -> episode == other.episode && _podcasts == other._podcasts
         else -> false
     }
 

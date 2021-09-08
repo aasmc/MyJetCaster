@@ -15,10 +15,9 @@ class CategoryStore(
     private val episodesDao: EpisodesDao,
     private val podcastsDao: PodcastsDao
 ) {
-
     /**
-     * Returns a flow containing a list of categories which is sorted by the number of
-     * podcasts in each category.
+     * Returns a flow containing a list of categories which is sorted by the number
+     * of podcasts in each category.
      */
     fun categoriesSortedByPodcastCount(
         limit: Int = Integer.MAX_VALUE
@@ -32,7 +31,7 @@ class CategoryStore(
      */
     fun podcastsInCategorySortedByPodcastCount(
         categoryId: Long,
-        limit: Int = Integer.MAX_VALUE
+        limit: Int = Int.MAX_VALUE
     ): Flow<List<PodcastWithExtraInfo>> {
         return podcastsDao.podcastsInCategorySortedByLastEpisode(categoryId, limit)
     }
@@ -65,9 +64,7 @@ class CategoryStore(
             PodcastCategoryEntry(podcastUri = podcastUri, categoryId = categoryId)
         )
     }
-
 }
-
 
 
 

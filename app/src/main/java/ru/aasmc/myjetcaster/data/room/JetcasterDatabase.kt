@@ -5,6 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.aasmc.myjetcaster.data.*
 
+/**
+ * The [RoomDatabase] we use in this app.
+ */
 @Database(
     entities = [
         Podcast::class,

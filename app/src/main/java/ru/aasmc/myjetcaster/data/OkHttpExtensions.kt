@@ -32,11 +32,12 @@ suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation 
             }
         }
     )
+
     continuation.invokeOnCancellation {
         try {
             cancel()
         } catch (t: Throwable) {
-            // ignore cancel exception
+            // Ignore cancel exception
         }
     }
 }

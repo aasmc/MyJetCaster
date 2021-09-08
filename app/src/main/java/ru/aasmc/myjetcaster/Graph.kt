@@ -39,7 +39,7 @@ object Graph {
     }
 
     private val podcastFetcher by lazy {
-        PodcastFetcher(
+        PodcastsFetcher(
             okHttpClient = okHttpClient,
             syndFeedInput = syndFeedInput,
             ioDispatcher = ioDispatcher
@@ -48,7 +48,7 @@ object Graph {
 
     val podcastStore by lazy {
         PodcastStore(
-            podcastsDao = database.podcastsDao(),
+            podcastDao = database.podcastsDao(),
             podcastFollowedEntryDao = database.podcastFollowedEntryDao(),
             transactionRunner = transactionRunner
         )

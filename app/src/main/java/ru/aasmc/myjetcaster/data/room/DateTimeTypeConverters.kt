@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 /**
- * Room [TypeConverter] function for various 'java.time.*' classes.
+ * Room [TypeConverter] functions for various `java.time.*` classes.
  */
 object DateTimeTypeConverters {
     @TypeConverter
@@ -25,7 +25,7 @@ object DateTimeTypeConverters {
     @TypeConverter
     @JvmStatic
     fun toLocalDateTime(value: String?): LocalDateTime? {
-        return value?.let { LocalDateTime.parse(it) }
+        return value?.let { LocalDateTime.parse(value) }
     }
 
     @TypeConverter

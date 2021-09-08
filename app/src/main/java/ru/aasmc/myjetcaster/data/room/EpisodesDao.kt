@@ -13,7 +13,7 @@ abstract class EpisodesDao {
         SELECT * FROM episodes WHERE podcast_uri = :podcastUri
         ORDER BY datetime(published) DESC
         LIMIT :limit
-    """
+        """
     )
     abstract fun episodesForPodcastUri(
         podcastUri: String,
@@ -23,12 +23,12 @@ abstract class EpisodesDao {
     @Transaction
     @Query(
         """
-        SELECT episodes.* FROM episodes 
+        SELECT episodes.* FROM episodes
         INNER JOIN podcast_category_entries ON episodes.podcast_uri = podcast_category_entries.podcast_uri
         WHERE category_id = :categoryId
         ORDER BY datetime(published) DESC
         LIMIT :limit
-    """
+        """
     )
     abstract fun episodesFromPodcastsInCategory(
         categoryId: Long,

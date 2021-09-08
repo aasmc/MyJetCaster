@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
  * @param syndFeedInput [SyndFeedInput] to use for parsing RSS feeds.
  * @param ioDispatcher [CoroutineDispatcher] to use for running fetch requests.
  */
-class PodcastFetcher(
+class PodcastsFetcher(
     private val okHttpClient: OkHttpClient,
     private val syndFeedInput: SyndFeedInput,
     private val ioDispatcher: CoroutineDispatcher
@@ -34,38 +34,40 @@ class PodcastFetcher(
      * It seems that most podcast hosts do not implement HTTP caching appropriately.
      * Instead of fetching data on every app open, we instead allow the use of 'stale'
      * network responses (up to 8 hours).
-     *
-     * A Cache-Control header with cache directives from a server or client.
-     * These directives set policy on what responses can be stored, and which requests
-     * can be satisfied by those stored responses.
      */
-    private val cacheControl: CacheControl by lazy {
+    private val cacheControl by lazy {
         CacheControl.Builder().maxStale(8, TimeUnit.HOURS).build()
     }
 
-
+    /**
+     * Returns a [Flow] which fetches each podcast feed and emits it in turn.
+     *
+     * The feeds are fetched concurrently, meaning that the resulting emission order may not
+     * match the order of [feedUrls].
+     */
     operator fun invoke(feedUrls: List<String>): Flow<PodcastRssResponse> {
         // We use flatMapMerge here to achieve concurrent fetching/parsing of the feeds.
         return feedUrls.asFlow()
             .flatMapMerge { feedUrl ->
                 flow {
-                    emit(fetchPodcasts(feedUrl))
+                    emit(fetchPodcast(feedUrl))
                 }.catch { e ->
-                    // if an exception was caught fetching the podcast, wrap it in
+                    // If an exception was caught while fetching the podcast, wrap it in
                     // an Error instance.
                     emit(PodcastRssResponse.Error(e))
                 }
             }
     }
 
-    private suspend fun fetchPodcasts(url: String): PodcastRssResponse {
+    private suspend fun fetchPodcast(url: String): PodcastRssResponse {
         val request = Request.Builder()
             .url(url)
             .cacheControl(cacheControl)
             .build()
 
         val response = okHttpClient.newCall(request).await()
-        // if the network request wasn't successful, throw an exception
+
+        // If the network request wasn't successful, throw an exception
         if (!response.isSuccessful) throw HttpException(response)
 
         // Otherwise we can parse the response using a Rome SyndFeedInput, then map it

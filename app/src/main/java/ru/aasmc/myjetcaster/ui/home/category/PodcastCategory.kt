@@ -300,7 +300,7 @@ private fun TopPodcastRowItem(
     Column(modifier = modifier) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .aspectRatio(1f)
                 .align(Alignment.CenterHorizontally)
         ) {
