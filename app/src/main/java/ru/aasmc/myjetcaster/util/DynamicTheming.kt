@@ -63,6 +63,7 @@ fun DynamicThemePrimaryColorsFromImage(
  * cache
  * @param isColorValid A lambda which allows filtering of the calculated image colors.
  */
+@Stable
 class DominantColorState(
     private val context: Context,
     private val defaultColor: Color,
@@ -108,6 +109,14 @@ class DominantColorState(
             }
             // save the resulting Dominant colors to the cache
             ?.also { result -> cache?.put(url, result) }
+    }
+
+    /**
+     * Reset the color values to [defaultColor].
+     */
+    fun reset() {
+        color = defaultColor
+        onColor = defaultOnColor
     }
 }
 

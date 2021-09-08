@@ -11,15 +11,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import ru.aasmc.myjetcaster.R
+import ru.aasmc.myjetcaster.ui.home.Home
 
 @Composable
 fun JetcasterApp() {
     val context = LocalContext.current
     var isOnline by remember { mutableStateOf(checkIfOnline(context)) }
     if (isOnline) {
-        // todo implement home screen
+        Home()
     } else {
-
+        OfflineDialog { isOnline = checkIfOnline(context) }
     }
 }
 
@@ -41,8 +42,8 @@ private fun checkIfOnline(context: Context): Boolean {
 fun OfflineDialog(onRetry: () -> Unit) {
     AlertDialog(
         onDismissRequest = {},
-        title = { Text(text = stringResource(R.string.connection_error_title))},
-        text ={ Text(text = stringResource(id = R.string.connection_error_message))},
+        title = { Text(text = stringResource(R.string.connection_error_title)) },
+        text = { Text(text = stringResource(id = R.string.connection_error_message)) },
         confirmButton = {
             TextButton(onClick = onRetry) {
                 Text(text = stringResource(id = R.string.retry_label))
